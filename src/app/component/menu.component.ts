@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
-import {CanvasService} from "./canvas.service";
-import {Sprite} from "./sprite";
+import {CanvasService} from "../service/canvas.service";
+import {Sprite} from "../pojo/sprite";
+import {CanvasComponent} from "./canvas.component";
 
 @Component({
   selector: "app-menu",
@@ -12,7 +13,11 @@ import {Sprite} from "./sprite";
                     <input #canvasName/>
                   </li>
                   <li>
-                    <input type="submit" value="Update" (click)="setCanvasName(canvasName.value)"/>
+                    <label>Size</label> 
+                    <input #canvasSize/>
+                  </li>
+                  <li>
+                    <input type="submit" value="Update" (click)="updateCanvas(canvasName.value, canvasSize.value)"/>
                   </li>
                 </div>
                 <div class="form sprite-creator">
@@ -83,9 +88,9 @@ import {Sprite} from "./sprite";
 export class MenuComponent{
   constructor(private canvasService: CanvasService) {}
 
-  setCanvasName(name: string)
+  updateCanvas(name: string, size: number)
   {
-    this.canvasService.setName(name);
+    this.canvasService.updateCanvas(name, size);
   }
 
   addSprite(name: string, code:string): void

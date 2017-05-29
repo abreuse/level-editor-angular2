@@ -6,40 +6,51 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var core_1 = require("@angular/core");
-var canvas_1 = require("./canvas");
+var wrapper_1 = require("../pojo/wrapper");
 var CanvasService = (function () {
     function CanvasService() {
-        this.canvas = new canvas_1.Canvas("", [], 256, 256);
+        this.wrapper = new wrapper_1.Wrapper("", {}, []);
     }
     CanvasService.prototype.addSprite = function (sprite) {
-        this.canvas.getSprites().push(sprite);
-        console.log(JSON.stringify(this.canvas));
+        this.wrapper.sprites.push(sprite);
+        console.log(JSON.stringify(this.wrapper));
     };
     ;
-    CanvasService.prototype.getCanvas = function () {
-        return this.canvas;
+    CanvasService.prototype.getWrapper = function () {
+        return this.wrapper;
     };
     CanvasService.prototype.setName = function (name) {
-        this.canvas.setName(name);
+        this.wrapper.canvasName = name;
     };
-    CanvasService.prototype.drawGrid = function (canvas) {
-        var context = canvas.getContext("2d");
+    CanvasService.prototype.setSize = function (size) {
+        this.wrapper.canvas.width = size;
+        this.wrapper.canvas.height = size;
+    };
+    CanvasService.prototype.setCanvas = function (refCanvas) {
+        this.wrapper.canvas = refCanvas;
+    };
+    CanvasService.prototype.drawGrid = function () {
+        var context = this.wrapper.canvas.getContext("2d");
         var COLUMN_WIDTH = 32;
         var LINE_HEIGHT = 32;
         context.fillStyle = "black";
-        for (var i = 0; i < canvas.width; i += COLUMN_WIDTH) {
+        for (var i = 0; i < this.wrapper.canvas.width; i += COLUMN_WIDTH) {
             context.beginPath();
             context.moveTo(0, i);
-            context.lineTo(canvas.width, i);
+            context.lineTo(this.wrapper.canvas.width, i);
             context.stroke();
         }
-        console.log("here : " + canvas.width);
-        for (var i = 0; i < canvas.height; i += LINE_HEIGHT) {
+        console.log("here : " + this.wrapper.canvas.width);
+        for (var i = 0; i < this.wrapper.canvas.height; i += LINE_HEIGHT) {
             context.beginPath();
             context.moveTo(i, 0);
-            context.lineTo(i, canvas.height);
+            context.lineTo(i, this.wrapper.canvas.height);
             context.stroke();
         }
+    };
+    CanvasService.prototype.updateCanvas = function (name, size) {
+        this.setName(name);
+        this.setSize(size);
     };
     return CanvasService;
 }());

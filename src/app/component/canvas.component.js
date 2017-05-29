@@ -9,31 +9,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var canvas_service_1 = require("./canvas.service");
+var canvas_service_1 = require("../service/canvas.service");
 var CanvasComponent = (function () {
     function CanvasComponent(canvasService) {
         this.canvasService = canvasService;
-        this.canvas = this.canvasService.getCanvas();
+        this.wrapper = this.canvasService.getWrapper();
     }
-    CanvasComponent.prototype.ngOnInit = function () {
-        //this.canvasService.addSprite(new Sprite("Wall", "W"));
-    };
     CanvasComponent.prototype.ngAfterViewInit = function () {
-        this.htmlCanvas = this.canvasRef.nativeElement;
-        this.htmlCanvas.width = this.canvas.getWidth();
-        this.htmlCanvas.height = this.canvas.getHeight();
-        this.canvasService.drawGrid(this.htmlCanvas);
+        this.canvas = this.refCanvas.nativeElement;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.canvasService.setCanvas(this.canvas);
+        this.canvasService.drawGrid();
     };
     return CanvasComponent;
 }());
 __decorate([
     core_1.ViewChild("refCanvas"),
     __metadata("design:type", core_1.ElementRef)
-], CanvasComponent.prototype, "canvasRef", void 0);
+], CanvasComponent.prototype, "refCanvas", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], CanvasComponent.prototype, "width", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], CanvasComponent.prototype, "height", void 0);
 CanvasComponent = __decorate([
     core_1.Component({
         selector: 'app-canvas',
-        template: "<h1>{{canvas.canvasName}}</h1>\n              <canvas #refCanvas class=\"center\" width=\"256\" style=\"border: solid;\" height=\"256\"></canvas>\n              <label>sprites stored : {{canvas.sprites.length}}</label>",
+        template: "<h1>{{wrapper.canvasName}}</h1>\n              <canvas #refCanvas class=\"center\" width=\"256\" style=\"border: solid;\" height=\"256\"></canvas>\n              <label>sprites stored : {{wrapper.sprites.length}}</label>",
         styles: ["\n            h1 {\n              text-align: center;\n              font-family: Anton;\n              font-size: 26px;\n            }\n            .center {\n              display: block;\n              margin: 0 auto;\n            }\n            label {\n              text-align: center;\n              display: block;\n              padding: 10px;\n            }\n          "]
     }),
     __metadata("design:paramtypes", [canvas_service_1.CanvasService])
