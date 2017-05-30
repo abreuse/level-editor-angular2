@@ -1,10 +1,16 @@
 import {Injectable} from "@angular/core";
 import {Sprite} from "../pojo/sprite";
 import {Wrapper} from "../pojo/wrapper";
+import * as _ from 'underscore';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {Resource} from "../pojo/resource";
 
 @Injectable()
 export class CanvasService{
-  wrapper = new Wrapper("", {}, []);
+  wrapper = new Wrapper("My first level", {}, []);
+  selectedSprite: Sprite;
+  public downloadJsonHref: SafeUrl;
+  constructor(private sanitizer: DomSanitizer){}
 
   addSprite(sprite: Sprite) {
     this.wrapper.sprites.push(sprite);
@@ -22,6 +28,7 @@ export class CanvasService{
   setSize(size: number) {
     this.wrapper.canvas.width = size;
     this.wrapper.canvas.height = size;
+    this.drawGrid();
   }
 
   setCanvas(refCanvas: any)
@@ -54,5 +61,62 @@ export class CanvasService{
   updateCanvas(name: string, size: number) {
     this.setName(name);
     this.setSize(size);
+    this.wrapper.sprites.length = 0;
+  }
+
+  updateSelectedSprite(sprite: Sprite) {
+    this.selectedSprite = sprite;
+  }
+
+
+
+  drawSprite(x: number, y: number) {
+    if(this.selectedSprite === undefined)
+    {
+      return;
+    }
+    console.log("sprite drew");
+    let context: CanvasRenderingContext2D = this.wrapper.canvas.getContext("2d");
+    let sprite = new Image();
+    sprite.src = this.selectedSprite.url;
+
+    x = Math.floor(x / 32);
+    y = Math.floor(y / 32);
+
+    let realX = x * 32;
+    let realY = y * 32;
+
+    context.drawImage(sprite, realX, realY, 32, 32);
+    this.addSpriteToWrapper(this.selectedSprite.code, realX, realY);
+  }
+
+  private addSpriteToWrapper(code: string, x: number, y: number) {
+    var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
+    for (var i = 0; i < jsonData.length; i++) {
+      var jsonRow = jsonData[i];
+      if(_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.y, y))
+      {
+        if(jsonRow.code === code) {
+          console.log("already exist");
+          return;
+        }
+        else {
+          this.wrapper.sprites[i].code = code;
+          return;
+        }
+      }
+      console.log(jsonRow.x);
+    }
+    this.wrapper.sprites.push(new Resource(code, x, y));
+    console.log(JSON.stringify(this.wrapper.sprites));
+    this.generateForUnity();
+  }
+
+
+  generateForUnity() {
+    return JSON.stringify(this.wrapper);
+    /*var json = JSON.stringify(this.wrapper);
+    var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(json));
+    return uri;*/
   }
 }

@@ -13,6 +13,9 @@ var Wrapper = (function () {
         configurable: true
     });
     Object.defineProperty(Wrapper.prototype, "canvasName", {
+        get: function () {
+            return this._canvasName;
+        },
         set: function (name) {
             this._canvasName = name;
         },

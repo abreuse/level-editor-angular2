@@ -14,7 +14,10 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     core_1.Component({
         selector: 'level-editor',
-        template: "    \n    <app-canvas [width]=\"256\" [height]=\"256\">Canvas is loading...</app-canvas>\n    <app-menu>Menu is loading...</app-menu>\n  "
+        template: "\n    <div class=\"wrapper\">\n      <app-canvas class=\"app-canvas\" [width]=\"512\" [height]=\"512\">Canvas is loading...</app-canvas>\n      <app-menu class=\"app-menu\">Menu is loading...</app-menu>\n    </div>\n  ",
+        styles: [
+            "\n      .wrapper{\n        width: auto%;\n        margin: 0 auto;\n      }\n      .app-canvas{\n      }\n      .app-menu{\n        display: inline-block;\n        vertical-align:top;\n        width: auto;\n    "
+        ]
     })
 ], AppComponent);
 exports.AppComponent = AppComponent;

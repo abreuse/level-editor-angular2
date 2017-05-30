@@ -1,13 +1,19 @@
 import {Sprite} from "./sprite";
+import {Resource} from "./resource";
 
 export class Wrapper {
 
-  constructor(private _canvasName: string, private _canvas:any, private _sprites: Array<Sprite>)
+  constructor(private _canvasName: string, private _canvas:any, private _sprites: Array<Resource>)
   {}
 
   get sprites()
   {
     return this._sprites;
+  }
+
+  get canvasName()
+  {
+    return this._canvasName;
   }
 
   set canvasName(name: string) {

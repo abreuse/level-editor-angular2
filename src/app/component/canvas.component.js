@@ -14,6 +14,7 @@ var CanvasComponent = (function () {
     function CanvasComponent(canvasService) {
         this.canvasService = canvasService;
         this.wrapper = this.canvasService.getWrapper();
+        this.isDrawing = false;
     }
     CanvasComponent.prototype.ngAfterViewInit = function () {
         this.canvas = this.refCanvas.nativeElement;
@@ -21,6 +22,21 @@ var CanvasComponent = (function () {
         this.canvas.height = this.height;
         this.canvasService.setCanvas(this.canvas);
         this.canvasService.drawGrid();
+    };
+    CanvasComponent.prototype.onMousedown = function (event) {
+        this.isDrawing = true;
+        var x = event.x;
+        var y = event.y;
+        console.log("mouse down : " + x + ";" + y);
+        this.canvasService.drawSprite(x, y);
+    };
+    CanvasComponent.prototype.onMousemove = function (event) {
+        if (this.isDrawing) {
+            this.onMousedown(event);
+        }
+    };
+    CanvasComponent.prototype.onMouseup = function (event) {
+        this.isDrawing = false;
     };
     return CanvasComponent;
 }());
@@ -36,11 +52,29 @@ __decorate([
     core_1.Input(),
     __metadata("design:type", Number)
 ], CanvasComponent.prototype, "height", void 0);
+__decorate([
+    core_1.HostListener('mousedown', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [MouseEvent]),
+    __metadata("design:returntype", void 0)
+], CanvasComponent.prototype, "onMousedown", null);
+__decorate([
+    core_1.HostListener('mousemove', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [MouseEvent]),
+    __metadata("design:returntype", void 0)
+], CanvasComponent.prototype, "onMousemove", null);
+__decorate([
+    core_1.HostListener('mouseup', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [MouseEvent]),
+    __metadata("design:returntype", void 0)
+], CanvasComponent.prototype, "onMouseup", null);
 CanvasComponent = __decorate([
     core_1.Component({
         selector: 'app-canvas',
-        template: "<h1>{{wrapper.canvasName}}</h1>\n              <canvas #refCanvas class=\"center\" width=\"256\" style=\"border: solid;\" height=\"256\"></canvas>\n              <label>sprites stored : {{wrapper.sprites.length}}</label>",
-        styles: ["\n            h1 {\n              text-align: center;\n              font-family: Anton;\n              font-size: 26px;\n            }\n            .center {\n              display: block;\n              margin: 0 auto;\n            }\n            label {\n              text-align: center;\n              display: block;\n              padding: 10px;\n            }\n          "]
+        template: "<!--<h1>{{wrapper.canvasName}}</h1>-->\n              <canvas #refCanvas class=\"center\" style=\"border: solid;\" height=\"256\"></canvas>",
+        styles: ["\n            h1 {\n              text-align: center;\n              font-family: Anton;\n              font-size: 26px;\n            }\n            .center {\n/*              display: block;\n              margin: 0 auto;\n              width: auto;*/\n            }\n            label {\n              text-align: center;\n              display: block;\n              padding: 10px;\n            }\n          "]
     }),
     __metadata("design:paramtypes", [canvas_service_1.CanvasService])
 ], CanvasComponent);

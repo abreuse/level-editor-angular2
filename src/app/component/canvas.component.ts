@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, HostListener, Input, ViewChild, ElementRef } from '@angular/core';
 import { Sprite } from "../pojo/sprite";
 import { CanvasService } from "../service/canvas.service";
 import {Wrapper} from "../pojo/wrapper";
@@ -7,9 +7,8 @@ import {Wrapper} from "../pojo/wrapper";
 
 @Component({
   selector: 'app-canvas',
-  template: `<h1>{{wrapper.canvasName}}</h1>
-              <canvas #refCanvas class="center" width="256" style="border: solid;" height="256"></canvas>
-              <label>sprites stored : {{wrapper.sprites.length}}</label>`,
+  template: `<!--<h1>{{wrapper.canvasName}}</h1>-->
+              <canvas #refCanvas class="center" style="border: solid;" height="256"></canvas>`,
   styles: [`
             h1 {
               text-align: center;
@@ -17,8 +16,9 @@ import {Wrapper} from "../pojo/wrapper";
               font-size: 26px;
             }
             .center {
-              display: block;
+/*              display: block;
               margin: 0 auto;
+              width: auto;*/
             }
             label {
               text-align: center;
@@ -37,6 +37,7 @@ export class CanvasComponent  {
 
   @Input() width: number;
   @Input() height: number;
+  private isDrawing = false;
 
   ngAfterViewInit() {
     this.canvas = this.refCanvas.nativeElement;
@@ -44,5 +45,26 @@ export class CanvasComponent  {
     this.canvas.height = this.height;
     this.canvasService.setCanvas(this.canvas);
     this.canvasService.drawGrid();
+  }
+
+  @HostListener('mousedown', ['$event'])
+  onMousedown(event: MouseEvent) {
+    this.isDrawing = true;
+    let x:number = event.x;
+    let y:number = event.y;
+    console.log("mouse down : " + x + ";" + y);
+    this.canvasService.drawSprite(x, y)
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMousemove(event: MouseEvent) {
+    if(this.isDrawing){
+      this.onMousedown(event);
+    }
+  }
+
+  @HostListener('mouseup', ['$event'])
+  onMouseup(event: MouseEvent) {
+    this.isDrawing = false;
   }
 }
