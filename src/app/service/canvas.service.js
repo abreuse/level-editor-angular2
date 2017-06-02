@@ -18,11 +18,6 @@ var CanvasService = (function () {
         this.sanitizer = sanitizer;
         this.wrapper = new wrapper_1.Wrapper("My first level", {}, []);
     }
-    CanvasService.prototype.addSprite = function (sprite) {
-        this.wrapper.sprites.push(sprite);
-        console.log(JSON.stringify(this.wrapper));
-    };
-    ;
     CanvasService.prototype.getWrapper = function () {
         return this.wrapper;
     };
@@ -77,13 +72,17 @@ var CanvasService = (function () {
         var realX = x * 32;
         var realY = y * 32;
         context.drawImage(sprite, realX, realY, 32, 32);
-        this.addSpriteToWrapper(this.selectedSprite.code, realX, realY);
+        if (this.selectedSprite.code === "E") {
+            this.deleteSpriteFromWrapper(x, y);
+        }
+        else
+            this.addSpriteToWrapper(this.selectedSprite.code, x, y);
     };
-    CanvasService.prototype.addSpriteToWrapper = function (code, x, y) {
+    CanvasService.prototype.addSpriteToWrapper = function (code, x, z) {
         var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
         for (var i = 0; i < jsonData.length; i++) {
             var jsonRow = jsonData[i];
-            if (_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.y, y)) {
+            if (_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.z, z)) {
                 if (jsonRow.code === code) {
                     console.log("already exist");
                     return;
@@ -95,15 +94,27 @@ var CanvasService = (function () {
             }
             console.log(jsonRow.x);
         }
-        this.wrapper.sprites.push(new resource_1.Resource(code, x, y));
+        this.wrapper.sprites.push(new resource_1.Resource(code, x, z));
         console.log(JSON.stringify(this.wrapper.sprites));
         this.generateForUnity();
     };
     CanvasService.prototype.generateForUnity = function () {
         return JSON.stringify(this.wrapper);
-        /*var json = JSON.stringify(this.wrapper);
-        var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(json));
-        return uri;*/
+        /*var wrapper = JSON.stringify(this.wrapper);
+         var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/wrapper;charset=UTF-8," + encodeURIComponent(wrapper));
+         return uri;*/
+    };
+    CanvasService.prototype.updateName = function (levelName) {
+        this.wrapper.canvasName = levelName;
+    };
+    CanvasService.prototype.deleteSpriteFromWrapper = function (x, z) {
+        var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
+        for (var i = 0; i < jsonData.length; i++) {
+            var jsonRow = jsonData[i];
+            if (_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.z, z)) {
+                this.wrapper.sprites.splice(i, 1);
+            }
+        }
     };
     return CanvasService;
 }());

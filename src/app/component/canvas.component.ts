@@ -16,9 +16,6 @@ import {Wrapper} from "../pojo/wrapper";
               font-size: 26px;
             }
             .center {
-/*              display: block;
-              margin: 0 auto;
-              width: auto;*/
             }
             label {
               text-align: center;
@@ -50,8 +47,8 @@ export class CanvasComponent  {
   @HostListener('mousedown', ['$event'])
   onMousedown(event: MouseEvent) {
     this.isDrawing = true;
-    let x:number = event.x;
-    let y:number = event.y;
+    let x:number = event.offsetX;
+    let y:number = event.offsetY;
     console.log("mouse down : " + x + ";" + y);
     this.canvasService.drawSprite(x, y)
   }

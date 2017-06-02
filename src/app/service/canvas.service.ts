@@ -6,16 +6,13 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {Resource} from "../pojo/resource";
 
 @Injectable()
-export class CanvasService{
+export class CanvasService {
   wrapper = new Wrapper("My first level", {}, []);
   selectedSprite: Sprite;
   public downloadJsonHref: SafeUrl;
-  constructor(private sanitizer: DomSanitizer){}
 
-  addSprite(sprite: Sprite) {
-    this.wrapper.sprites.push(sprite);
-    console.log(JSON.stringify(this.wrapper));
-  };
+  constructor(private sanitizer: DomSanitizer) {
+  }
 
   getWrapper() {
     return this.wrapper;
@@ -31,8 +28,7 @@ export class CanvasService{
     this.drawGrid();
   }
 
-  setCanvas(refCanvas: any)
-  {
+  setCanvas(refCanvas: any) {
     this.wrapper.canvas = refCanvas;
   }
 
@@ -69,10 +65,8 @@ export class CanvasService{
   }
 
 
-
   drawSprite(x: number, y: number) {
-    if(this.selectedSprite === undefined)
-    {
+    if (this.selectedSprite === undefined) {
       return;
     }
     console.log("sprite drew");
@@ -87,16 +81,19 @@ export class CanvasService{
     let realY = y * 32;
 
     context.drawImage(sprite, realX, realY, 32, 32);
-    this.addSpriteToWrapper(this.selectedSprite.code, realX, realY);
+    if (this.selectedSprite.code === "E") {
+      this.deleteSpriteFromWrapper(x, y);
+    }
+    else
+      this.addSpriteToWrapper(this.selectedSprite.code, x, y);
   }
 
-  private addSpriteToWrapper(code: string, x: number, y: number) {
+  private addSpriteToWrapper(code: string, x: number, z: number) {
     var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
     for (var i = 0; i < jsonData.length; i++) {
       var jsonRow = jsonData[i];
-      if(_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.y, y))
-      {
-        if(jsonRow.code === code) {
+      if (_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.z, z)) {
+        if (jsonRow.code === code) {
           console.log("already exist");
           return;
         }
@@ -107,7 +104,7 @@ export class CanvasService{
       }
       console.log(jsonRow.x);
     }
-    this.wrapper.sprites.push(new Resource(code, x, y));
+    this.wrapper.sprites.push(new Resource(code, x, z));
     console.log(JSON.stringify(this.wrapper.sprites));
     this.generateForUnity();
   }
@@ -115,8 +112,22 @@ export class CanvasService{
 
   generateForUnity() {
     return JSON.stringify(this.wrapper);
-    /*var json = JSON.stringify(this.wrapper);
-    var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(json));
-    return uri;*/
+    /*var wrapper = JSON.stringify(this.wrapper);
+     var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/wrapper;charset=UTF-8," + encodeURIComponent(wrapper));
+     return uri;*/
+  }
+
+  updateName(levelName: string) {
+    this.wrapper.canvasName = levelName;
+  }
+
+  private deleteSpriteFromWrapper(x: number, z: number) {
+    var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
+    for (var i = 0; i < jsonData.length; i++) {
+      var jsonRow = jsonData[i];
+      if (_.isEqual(jsonRow.x, x) && _.isEqual(jsonRow.z, z)) {
+        this.wrapper.sprites.splice(i, 1);
+      }
+    }
   }
 }

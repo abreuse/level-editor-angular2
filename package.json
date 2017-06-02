@@ -34,6 +34,7 @@
     "@angular/router": "~4.0.0",
     "@types/underscore": "^1.8.0",
     "angular-in-memory-web-api": "~0.3.0",
+    "angular2-autosize": "^1.0.1",
     "core-js": "^2.4.1",
     "ng2-img-tools": "^1.0.4",
     "rxjs": "5.0.1",

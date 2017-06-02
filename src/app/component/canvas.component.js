@@ -25,8 +25,8 @@ var CanvasComponent = (function () {
     };
     CanvasComponent.prototype.onMousedown = function (event) {
         this.isDrawing = true;
-        var x = event.x;
-        var y = event.y;
+        var x = event.offsetX;
+        var y = event.offsetY;
         console.log("mouse down : " + x + ";" + y);
         this.canvasService.drawSprite(x, y);
     };
@@ -74,7 +74,7 @@ CanvasComponent = __decorate([
     core_1.Component({
         selector: 'app-canvas',
         template: "<!--<h1>{{wrapper.canvasName}}</h1>-->\n              <canvas #refCanvas class=\"center\" style=\"border: solid;\" height=\"256\"></canvas>",
-        styles: ["\n            h1 {\n              text-align: center;\n              font-family: Anton;\n              font-size: 26px;\n            }\n            .center {\n/*              display: block;\n              margin: 0 auto;\n              width: auto;*/\n            }\n            label {\n              text-align: center;\n              display: block;\n              padding: 10px;\n            }\n          "]
+        styles: ["\n            h1 {\n              text-align: center;\n              font-family: Anton;\n              font-size: 26px;\n            }\n            .center {\n            }\n            label {\n              text-align: center;\n              display: block;\n              padding: 10px;\n            }\n          "]
     }),
     __metadata("design:paramtypes", [canvas_service_1.CanvasService])
 ], CanvasComponent);

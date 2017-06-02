@@ -13,7 +13,7 @@ import { SafeUrl } from '@angular/platform-browser';
                   <h2>Level properties</h2>
                   <li>
                     <label>Name</label> 
-                    <input #canvasName value="My first level"/>
+                    <input #canvasName value="My First Level"/>
                   </li>
                   <li>
                     <label>Size</label> 
@@ -35,11 +35,11 @@ import { SafeUrl } from '@angular/platform-browser';
                   </li>-->
                 </div>
               </section>
-                <div class="form generate-for-unity">
+               <div class="form generate-for-unity">
                   <li>
                     <input type="submit" value="Generate JSON for Unity" (click)="generateForUnity()"/>
                   </li>
-                  {{json}}
+                  <textarea rows="10" cols="50">{{wrapper | json}}</textarea>
                   <!--<a title="Download JSON" [href]="downloadJsonHref" download="download.json"></a>-->
                 </div>`,
   styles: [`
@@ -49,7 +49,8 @@ import { SafeUrl } from '@angular/platform-browser';
                   margin: 0 auto;
               }
               .generate-for-unity{
-                position: absolute;
+                /*position: relative;*/
+                width: auto;
               }
               .canvas-name,
               .sprite-selector{
@@ -135,19 +136,12 @@ export class MenuComponent{
   //TODO: spriteService to get SPRITES
   sprites = SPRITES;
   selectedSprite: Sprite;
-  json: string;
-
-  //@Input() downloadJsonHref: SafeUrl;
+  wrapper: any;
 
   updateCanvas(name: string, size: number)
   {
     this.canvasService.updateCanvas(name, size);
   }
-
-/*  addSprite(name: string, code:string): void
-  {
-    this.canvasService.addSprite(new Sprite(name, code));
-  }*/
 
   onSelect(sprite: Sprite): void {
     console.log("selected : " + sprite.name);
@@ -157,7 +151,7 @@ export class MenuComponent{
 
   generateForUnity()
   {
-    this.json = this.canvasService.generateForUnity();
+    this.wrapper = this.canvasService.getWrapper();//this.canvasService.generateForUnity();
      //this.downloadJsonHref = this.canvasService.generateForUnity();
   }
 }
