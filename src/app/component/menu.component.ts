@@ -27,12 +27,20 @@ import { SafeUrl } from '@angular/platform-browser';
                   <h2>Sprites selector</h2>
                      <ul class="sprites">
                         <li *ngFor="let sprite of sprites" [class.selected]="sprite === selectedSprite" (click)="onSelect(sprite)">
-                          <span>{{sprite.name}}</span>
+                          <span><img src="{{sprite.url}}"/> {{sprite.name}}</span>
                         </li>
                       </ul>
 <!--                  <li>
                     <input type='submit' value='Create' (click)="addSprite(name.value, code.value)"/>
                   </li>-->
+                  <h2>Add a sprite</h2>
+                  <li>
+                    <label>Name</label> 
+                    <input #spriteName value=""/>
+                  </li>
+                  <li>
+                    <input type="submit" value="Add" (click)="addSprite(spriteName.value)" (click)="spriteName.value=''"/>
+                  </li>
                 </div>
               </section>
                <div class="form generate-for-unity">
@@ -105,11 +113,12 @@ import { SafeUrl } from '@angular/platform-browser';
               }
               .sprites li {
                 cursor: pointer;
+                text-align: center;
                 position: relative;
                 left: 0;
                 background-color: #EEE;
-                margin: .5em;
-                padding: .3em 0;
+                margin: 20px;
+                padding: 20px;
                 height: 1.6em;
                 border-radius: 4px;
               }
@@ -137,6 +146,30 @@ export class MenuComponent{
   sprites = SPRITES;
   selectedSprite: Sprite;
   wrapper: any;
+  alreadyRandomize: number[];
+
+  addSprite(name: string)
+  {
+    this.sprites.push(new Sprite(name, name.charAt(0), "app/sprites/" + this.random(1, 9) + ".png"));
+    console.log(JSON.stringify(this.sprites));
+  }
+
+  random(min: number, max: number)
+  {
+    if(this.alreadyRandomize == undefined)
+      this.alreadyRandomize = [];
+
+    let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    if(this.alreadyRandomize.indexOf(randomNumber) === -1)
+    {
+      this.alreadyRandomize.push(randomNumber);
+      return randomNumber;
+    }
+    else
+    {
+      return this.random(1,9)
+    }
+  }
 
   updateCanvas(name: string, size: number)
   {

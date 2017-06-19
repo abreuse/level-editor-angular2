@@ -73,7 +73,7 @@ export class CanvasService {
     let context: CanvasRenderingContext2D = this.wrapper.canvas.getContext("2d");
     let sprite = new Image();
     sprite.src = this.selectedSprite.url;
-
+    console.log(sprite.src);
     x = Math.floor(x / 32);
     y = Math.floor(y / 32);
 

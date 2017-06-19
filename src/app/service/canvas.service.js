@@ -67,6 +67,7 @@ var CanvasService = (function () {
         var context = this.wrapper.canvas.getContext("2d");
         var sprite = new Image();
         sprite.src = this.selectedSprite.url;
+        console.log(sprite.src);
         x = Math.floor(x / 32);
         y = Math.floor(y / 32);
         var realX = x * 32;
