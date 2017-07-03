@@ -85,10 +85,10 @@ export class CanvasService {
       this.deleteSpriteFromWrapper(x, y);
     }
     else
-      this.addSpriteToWrapper(this.selectedSprite.code, x, y);
+      this.addSpriteToWrapper(this.selectedSprite.name, this.selectedSprite.code, x, y);
   }
 
-  private addSpriteToWrapper(code: string, x: number, z: number) {
+  private addSpriteToWrapper(name: string, code: string, x: number, z: number) {
     var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
     for (var i = 0; i < jsonData.length; i++) {
       var jsonRow = jsonData[i];
@@ -104,7 +104,7 @@ export class CanvasService {
       }
       console.log(jsonRow.x);
     }
-    this.wrapper.sprites.push(new Resource(code, x, z));
+    this.wrapper.sprites.push(new Resource(name, code, x, z));
     console.log(JSON.stringify(this.wrapper.sprites));
     this.generateForUnity();
   }

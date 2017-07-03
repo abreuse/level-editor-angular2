@@ -154,7 +154,7 @@ export class MenuComponent{
     console.log(JSON.stringify(this.sprites));
   }
 
-  random(min: number, max: number)
+  random(min: number, max: number): number
   {
     if(this.alreadyRandomize == undefined)
       this.alreadyRandomize = [];

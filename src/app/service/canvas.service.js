@@ -77,9 +77,9 @@ var CanvasService = (function () {
             this.deleteSpriteFromWrapper(x, y);
         }
         else
-            this.addSpriteToWrapper(this.selectedSprite.code, x, y);
+            this.addSpriteToWrapper(this.selectedSprite.name, this.selectedSprite.code, x, y);
     };
-    CanvasService.prototype.addSpriteToWrapper = function (code, x, z) {
+    CanvasService.prototype.addSpriteToWrapper = function (name, code, x, z) {
         var jsonData = JSON.parse(JSON.stringify(this.wrapper.sprites));
         for (var i = 0; i < jsonData.length; i++) {
             var jsonRow = jsonData[i];
@@ -95,7 +95,7 @@ var CanvasService = (function () {
             }
             console.log(jsonRow.x);
         }
-        this.wrapper.sprites.push(new resource_1.Resource(code, x, z));
+        this.wrapper.sprites.push(new resource_1.Resource(name, code, x, z));
         console.log(JSON.stringify(this.wrapper.sprites));
         this.generateForUnity();
     };

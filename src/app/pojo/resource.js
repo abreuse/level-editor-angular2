@@ -1,6 +1,7 @@
 "use strict";
 var Resource = (function () {
-    function Resource(code, x, z) {
+    function Resource(name, code, x, z) {
+        this.name = name;
         this.code = code;
         this.x = x;
         this.z = z;
